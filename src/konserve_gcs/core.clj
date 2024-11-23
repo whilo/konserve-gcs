@@ -232,7 +232,7 @@
   (or store-path store-id
       (throw (Exception. "expected store path in store-spec as :store-path or :store-id"))))
 
-(defn connect-bucket-store [spec & {:keys [opts] :as params}]
+(defn connect-store [spec & {:keys [opts] :as params}]
   (assert (string? (:bucket spec)))
   (assert (string? (:location spec)))
   (let [client (cloud-storage-client spec)

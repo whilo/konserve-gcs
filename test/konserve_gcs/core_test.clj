@@ -23,7 +23,7 @@
               :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "compliance_test_store"}
         _(kgcs/delete-store spec)
-        store  (kgcs/connect-bucket-store spec :opts {:sync? true})]
+        store  (kgcs/connect-store spec :opts {:sync? true})]
     (testing "Compliance test with default config."
       (compliance-test store))))
 
@@ -36,7 +36,7 @@
               :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "cache_test_store"}
         _(kgcs/delete-store spec)
-        store (kgcs/connect-bucket-store spec :opts {:sync? true})]
+        store (kgcs/connect-store spec :opts {:sync? true})]
     (<!! (ct/test-cached-PEDNKeyValueStore-async store))))
 
 (deftest cache-PKeyIterable-test
@@ -45,7 +45,7 @@
               :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "cache_test_store"}
         _(kgcs/delete-store spec)
-        store (kgcs/connect-bucket-store spec :opts {:sync? true})]
+        store (kgcs/connect-store spec :opts {:sync? true})]
     (<!! (ct/test-cached-PKeyIterable-async store))))
 
 (deftest cache-PBin-test
@@ -54,7 +54,7 @@
               :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "cache_test_store"}
         _(kgcs/delete-store spec)
-        store (kgcs/connect-bucket-store spec :opts {:sync? true})
+        store (kgcs/connect-store spec :opts {:sync? true})
         f (fn [{:keys [input-stream]}]
             (async/to-chan! [input-stream]))]
     (<!! (ct/test-cached-PBin-async store f))))
@@ -68,7 +68,7 @@
               :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "gc_test_store"}
         _(kgcs/delete-store spec)
-        store (kgcs/connect-bucket-store spec :opts {:sync? true})]
+        store (kgcs/connect-store spec :opts {:sync? true})]
     (<!! (gct/test-gc-async store))))
 
 #!==================
@@ -80,7 +80,7 @@
               :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "serializers_test_store"}]
     (<!! (st/test-fressian-serializers-async spec
-                                             kgcs/connect-bucket-store
+                                             kgcs/connect-store
                                              (fn [p] (go (kgcs/delete-store p)))
                                              (fn [{:keys [input-stream]}]
                                                (async/to-chan! [input-stream]))))))
@@ -91,7 +91,7 @@
               :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "serializers_test_store"}]
     (st/cbor-serializer-test spec
-                             kgcs/connect-bucket-store
+                             kgcs/connect-store
                              (fn [p] (go (kgcs/delete-store p))))))
 
 #!==================
@@ -102,7 +102,7 @@
               :location KONSERVE_TEST_BUCKET_LOCATION
               :store-path "encryptor_test_store"}]
     (et/sync-encryptor-test spec
-                            kgcs/connect-bucket-store
+                            kgcs/connect-store
                             (fn [p] (go (kgcs/delete-store p))))))
 
 (deftest encryptor-async-test
@@ -110,5 +110,5 @@
               :location KONSERVE_TEST_BUCKET_LOCATION
               :store-path "encryptor_test_store"}]
     (<!! (et/async-encryptor-test spec
-                                  kgcs/connect-bucket-store
+                                  kgcs/connect-store
                                   (fn [p] (go (kgcs/delete-store p)))))))
