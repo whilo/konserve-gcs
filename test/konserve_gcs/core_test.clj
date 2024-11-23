@@ -13,9 +13,14 @@
   (or (System/getenv "KONSERVE_TEST_BUCKET")
       (throw (Exception. "set KONSERVE_TEST_BUCKET in the environment"))))
 
+(def KONSERVE_TEST_BUCKET_LOCATION
+  (or (System/getenv "KONSERVE_TEST_BUCKET_LOCATION")
+      (throw (Exception. "set KONSERVE_TEST_BUCKET_LOCATION in the environment"))))
+
 (deftest cloud-storage-compliance-test
   (log/info "starting cloud-storage-compliance-test")
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "compliance_test_store"}
         _(kgcs/delete-store spec)
         store  (kgcs/connect-bucket-store spec :opts {:sync? true})]
@@ -28,6 +33,7 @@
 (deftest cache-PEDNKeyValueStore-test
   (log/info "starting cache-PEDNKeyValueStore-test")
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "cache_test_store"}
         _(kgcs/delete-store spec)
         store (kgcs/connect-bucket-store spec :opts {:sync? true})]
@@ -36,6 +42,7 @@
 (deftest cache-PKeyIterable-test
   (log/info "starting cache-PKeyIterable-test")
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "cache_test_store"}
         _(kgcs/delete-store spec)
         store (kgcs/connect-bucket-store spec :opts {:sync? true})]
@@ -44,6 +51,7 @@
 (deftest cache-PBin-test
   (log/info "starting cache-PBin-test")
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "cache_test_store"}
         _(kgcs/delete-store spec)
         store (kgcs/connect-bucket-store spec :opts {:sync? true})
@@ -57,6 +65,7 @@
 (deftest gc-test
   (log/info "starting gc-test")
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "gc_test_store"}
         _(kgcs/delete-store spec)
         store (kgcs/connect-bucket-store spec :opts {:sync? true})]
@@ -68,6 +77,7 @@
 (deftest fressian-serializer-test
   (log/info "starting fressian-serializer-test")
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "serializers_test_store"}]
     (<!! (st/test-fressian-serializers-async spec
                                              kgcs/connect-bucket-store
@@ -78,6 +88,7 @@
 (deftest CBOR-serializer-test
   (log/info "starting CBOR-serializer-test")
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location   KONSERVE_TEST_BUCKET_LOCATION
               :store-path "serializers_test_store"}]
     (st/cbor-serializer-test spec
                              kgcs/connect-bucket-store
@@ -88,6 +99,7 @@
 
 (deftest encryptor-sync-test
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location KONSERVE_TEST_BUCKET_LOCATION
               :store-path "encryptor_test_store"}]
     (et/sync-encryptor-test spec
                             kgcs/connect-bucket-store
@@ -95,6 +107,7 @@
 
 (deftest encryptor-async-test
   (let [spec {:bucket     KONSERVE_TEST_BUCKET
+              :location KONSERVE_TEST_BUCKET_LOCATION
               :store-path "encryptor_test_store"}]
     (<!! (et/async-encryptor-test spec
                                   kgcs/connect-bucket-store
