@@ -241,7 +241,7 @@
         config (merge {:opts               opts
                        :config             {:sync-blob? true
                                             :in-place? true
-                                            :no-update? true
+                                            :no-backup? true
                                             :lock-blob? true}
                        :default-serializer :FressianSerializer
                        :buffer-size        (* 1024 1024)}
